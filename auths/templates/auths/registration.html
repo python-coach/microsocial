@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+
+{% block content %}
+
+    REGISTRATION
+
+    <a href="{% url 'login' %}">{% trans 'авторизация'|capfirst %}</a>
+
+{% endblock %}
