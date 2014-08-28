@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import absolute_import
 from django.conf.urls import patterns, url
-from auths.views import RegistrationView, PasswordRecoveryView
+from auths.views import RegistrationView, PasswordRecoveryView, RegistrationConfirmView
 
 
 urlpatterns = patterns(
@@ -15,6 +15,11 @@ urlpatterns = patterns(
         r'^registration/$',
         RegistrationView.as_view(),
         name='registration'
+    ),
+    url(
+        r'^registration/(?P<token>.+)/$',
+        RegistrationConfirmView.as_view(),
+        name='registration_confirm'
     ),
     url(
         r'^password-recovery/$',

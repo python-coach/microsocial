@@ -1,4 +1,4 @@
-{% load static i18n %}<!DOCTYPE html>
+{% load static i18n microsocial %}<!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="utf-8">
@@ -16,6 +16,7 @@
         {% block head %}
             {% include 'header.html' %}
         {% endblock %}
+        {% show_messages %}
         {% block content %}
         {% endblock %}
     </div>
