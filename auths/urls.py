@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib.auth.views import logout
-from auths.views import RegistrationView, PasswordRecoveryView, RegistrationConfirmView
+from auths.views import RegistrationView, PasswordRecoveryView, RegistrationConfirmView, PasswordRecoveryConfirmView
 
 
 urlpatterns = patterns(
@@ -33,5 +33,10 @@ urlpatterns = patterns(
         r'^password-recovery/$',
         PasswordRecoveryView.as_view(),
         name='password_recovery'
+    ),
+    url(
+        r'^password-recovery/(?P<token>.+)/$',
+        PasswordRecoveryConfirmView.as_view(),
+        name='password_recovery_confirm'
     ),
 )
