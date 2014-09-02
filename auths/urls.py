@@ -1,6 +1,8 @@
 # coding=utf-8
 from __future__ import absolute_import
+from django.conf import settings
 from django.conf.urls import patterns, url
+from django.contrib.auth.views import logout
 from auths.views import RegistrationView, PasswordRecoveryView, RegistrationConfirmView
 
 
@@ -10,6 +12,12 @@ urlpatterns = patterns(
         r'^login/$',
         'login_view',
         name='login'
+    ),
+    url(
+        r'^logout/$',
+        logout,
+        {'next_page': settings.LOGIN_URL},
+        name='logout'
     ),
     url(
         r'^registration/$',
