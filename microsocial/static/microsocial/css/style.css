@@ -23,3 +23,7 @@ footer.base .flatpages a {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+table.borderless td {
+    border: none !important;
+}

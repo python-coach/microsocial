@@ -60,3 +60,6 @@ db.sqlite3
 
 # temporary
 tmp/
+
+# media
+media/avatars/
