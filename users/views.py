@@ -15,6 +15,7 @@ from django.utils.translation import ugettext as _
 class UserProfileView(TemplateView):
     template_name = 'users/profile.html'
 
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.user = get_object_or_404(User, pk=kwargs['user_id'])
         self.wallpost_form = UserWallPostForm(request.POST or None)
