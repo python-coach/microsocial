@@ -199,6 +199,7 @@ class FriendInvitation(models.Model):
 
     class Meta:
         unique_together = ('from_user', 'to_user')
+        ordering = ('-pk',)
 
 
 class UserWallPost(models.Model):

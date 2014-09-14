@@ -1,7 +1,8 @@
 # coding=utf-8
 from __future__ import absolute_import
 from django.conf.urls import url
-from users.views import UserProfileView, UserSettingsView
+from users.views import (UserProfileView, UserSettingsView, UserFriendsView, UserIncomingView, UserOutcomingView,
+                         FriendshipAPIView)
 
 
 urlpatterns = [
@@ -14,5 +15,25 @@ urlpatterns = [
         r'^settings/$',
         UserSettingsView.as_view(),
         name='user_settings'
+    ),
+    url(
+        r'^friends/$',
+        UserFriendsView.as_view(),
+        name='user_friends'
+    ),
+    url(
+        r'^friends/incoming/$',
+        UserIncomingView.as_view(),
+        name='user_incoming'
+    ),
+    url(
+        r'^friends/outcoming/$',
+        UserOutcomingView.as_view(),
+        name='user_outcoming'
+    ),
+    url(
+        r'^api/friendship/$',
+        FriendshipAPIView.as_view(),
+        name='user_friendship_api'
     ),
 ]
