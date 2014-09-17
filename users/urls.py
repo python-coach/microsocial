@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from django.conf.urls import url
 from users.views import (UserProfileView, UserSettingsView, UserFriendsView, UserIncomingView, UserOutcomingView,
-                         FriendshipAPIView)
+                         FriendshipAPIView, SearchView)
 
 
 urlpatterns = [
@@ -35,5 +35,10 @@ urlpatterns = [
         r'^api/friendship/$',
         FriendshipAPIView.as_view(),
         name='user_friendship_api'
+    ),
+    url(
+        r'^search/$',
+        SearchView.as_view(),
+        name='user_search'
     ),
 ]
