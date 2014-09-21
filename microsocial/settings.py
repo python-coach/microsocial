@@ -72,13 +72,13 @@ DATABASES = {
     }
 }
 
-LANGUAGE_CODE = 'ru'
-
 LANGUAGES = (
     ('en', _(u'English')),
     ('ru', _(u'Русский')),
     ('uk', _(u'Українська')),
 )
+
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Kiev'
 
@@ -97,4 +97,4 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'main'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp')
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp', 'emails')

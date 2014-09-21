@@ -7,7 +7,7 @@ from django.core.signing import Signer, BadSignature, TimestampSigner
 from django.core.urlresolvers import reverse_lazy
 from django.http import Http404
 from django.shortcuts import redirect
-from django.views.generic.base import TemplateView, RedirectView
+from django.views.generic import TemplateView, RedirectView
 from auths.forms import RegistrationForm, LoginForm, PasswordRecoveryForm, NewPasswordForm
 from users.models import User
 from django.utils.translation import ugettext as _

@@ -46,7 +46,7 @@ class UserFriendShipManager(models.Manager):
     @atomic
     def add(self, user1, user2):
         user1_id, user2_id = get_ids_from_users(user1, user2)
-        if user1 == user2:
+        if user1_id == user2_id:
             raise ValueError(_(u'Нельзя самого себя добавить в друзья.'))
         if not self.are_friends(user1_id, user2_id):
             through_model = self.model.friends.through
@@ -76,8 +76,8 @@ def get_avatar_fn(instance, filename):
     return 'avatars/{sub_dir}/{id}_{rnd}{ext}'.format(
         sub_dir=id_str.zfill(2)[-2:],
         id=id_str,
-        rnd=get_random_string(8, 'abcdefghijklmnopqrstuvwxyz123456789'),
-        ext=os.path.splitext(filename)[1]
+        rnd=get_random_string(8, 'abcdefghijklmnopqrstuvwxyz0123456789'),
+        ext=os.path.splitext(filename)[1],
     )
 
 
@@ -90,9 +90,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         (SEX_MALE, _(u'мужской')),
         (SEX_FEMALE, _(u'женский')),
     )
-    email = models.EmailField('email', unique=True)
-    first_name = models.CharField('first name', max_length=30)
-    last_name = models.CharField('last name', max_length=30, blank=True)
+    email = models.EmailField(_('email'), unique=True)
+    first_name = models.CharField(_('first name'), max_length=30)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
     is_staff = models.BooleanField(_('staff status'), default=False,
                                    help_text=_('Designates whether the user can log into this admin '
                                                'site.'))
@@ -129,7 +129,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def send_registration_mail(self):
         url = 'http://%s%s' % (
             Site.objects.get_current().domain,
-            reverse('registration_confirm', kwargs={'token': Signer(salt='registration-confirm').sign(self.pk)})
+            reverse('registration_confirm', kwargs={'token': Signer(salt='registration-confirm').sign(self.pk)}),
         )
         self.email_user(
             ugettext(u'Подтвердите регистрацию на microsocial'),
@@ -144,7 +144,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         token = TimestampSigner(salt='password-recovery-confirm').sign(data)
         url = 'http://%s%s' % (
             Site.objects.get_current().domain,
-            reverse('password_recovery_confirm', kwargs={'token': token})
+            reverse('password_recovery_confirm', kwargs={'token': token}),
         )
         self.email_user(
             ugettext(u'Подтвердите восстановление пароля на microsocial'),
@@ -177,7 +177,7 @@ class FriendInvitationManager(models.Manager):
         if self.is_pending(from_user_id, to_user_id):
             raise ValueError(_(u'Заявка уже создана и ожидает рассмотрения.'))
         if self.is_pending(to_user_id, from_user_id):  # если существует заявка от to_user к from_user
-            User.friendship.add(from_user, to_user)
+            User.friendship.add(from_user_id, to_user_id)
             return 2
         self.create(from_user_id=from_user_id, to_user_id=to_user_id)
         return 1
@@ -189,7 +189,7 @@ class FriendInvitationManager(models.Manager):
         from_user_id, to_user_id = get_ids_from_users(from_user, to_user)
         if not self.is_pending(from_user_id, to_user_id):
             raise ValueError(_(u'Заявка не существует.'))
-        User.friendship.add(from_user_id, to_user_id)
+        return User.friendship.add(from_user_id, to_user_id)
 
     def reject(self, from_user, to_user):
         """

@@ -62,12 +62,13 @@ class PasswordRecoveryForm(forms.Form, BootstrapFormMixin):
         BootstrapFormMixin.__init__(self)
         self._user = None
 
-    def clean(self):
-        data = super(PasswordRecoveryForm, self).clean()
+    def clean_email(self):
+        email = self.cleaned_data['email']
         try:
-            self._user = User.objects.get(email=data['email'])
+            self._user = User.objects.get(email=email)
         except User.DoesNotExist:
-            self.add_error('email', ugettext(u'Пользователя с таким email не существует.'))
+            raise forms.ValidationError(ugettext(u'Пользователя с таким email не существует.'))
+        return email
 
     def get_user(self):
         return self._user

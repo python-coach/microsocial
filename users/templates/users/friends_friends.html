@@ -16,7 +16,7 @@
                     <a href="{% url 'user_profile' item.pk %}">{{ item.get_full_name }}</a>
                 </h3>
                 <p>
-                    <form action="{% url 'user_friendship_api' %}" method="POST" style="display: inline-block;">
+                    <form action="{% url 'user_friendship_api' %}" method="post" style="display: inline-block;">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="delete_from_friends">
                         <input type="hidden" name="user_id" value="{{ item.pk }}">

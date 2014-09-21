@@ -16,7 +16,7 @@
                     <a href="{% url 'user_profile' item.from_user.pk %}">{{ item.from_user.get_full_name }}</a>
                 </h3>
                 <p>
-                    <form action="{% url 'user_friendship_api' %}" method="POST" style="display: inline-block;">
+                    <form action="{% url 'user_friendship_api' %}" method="post" style="display: inline-block;">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="approve">
                         <input type="hidden" name="user_id" value="{{ item.from_user.pk }}">
@@ -24,7 +24,7 @@
                         <input type="submit" class="btn btn-success btn-sm"
                                value="{% trans 'подтвердить'|capfirst %}">
                     </form>
-                    <form action="{% url 'user_friendship_api' %}" method="POST" style="display: inline-block;">
+                    <form action="{% url 'user_friendship_api' %}" method="post" style="display: inline-block;">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="reject">
                         <input type="hidden" name="user_id" value="{{ item.from_user.pk }}">
@@ -38,5 +38,4 @@
     {% endfor %}
 
     {% show_paginator items %}
-
 {% endblock %}

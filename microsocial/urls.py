@@ -11,7 +11,7 @@ urlpatterns = patterns(
     url(
         r'^$',
         'main',
-        name='main',
+        name='main'
     ),
     url(
         r'^i18n/setlang/$',
@@ -32,5 +32,5 @@ if settings.DEBUG:
 
 
 urlpatterns += [
-    url(r'', include('django.contrib.flatpages.urls'))
+    url(r'', include('django.contrib.flatpages.urls')),
 ]

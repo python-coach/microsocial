@@ -21,8 +21,12 @@ class UserProfileView(TemplateView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        self.user = get_object_or_404(User, pk=kwargs['user_id'])
-        self.is_my_profile = self.user == request.user
+        if request.user.is_authenticated() and int(kwargs['user_id']) == request.user.pk:
+            self.user = request.user
+            self.is_my_profile = True
+        else:
+            self.user = get_object_or_404(User, pk=kwargs['user_id'])
+            self.is_my_profile = False
         self.wallpost_form = UserWallPostForm(request.POST or None)
         return super(UserProfileView, self).dispatch(request, *args, **kwargs)
 
@@ -178,7 +182,7 @@ class FriendshipAPIView(View):
 
     def _get_int_or_none(self, attr_name):
         try:
-            return self.request.POST.get(attr_name)
+            return int(self.request.POST.get(attr_name))
         except (ValueError, TypeError):
             pass
 
@@ -215,22 +219,19 @@ class FriendshipAPIView(View):
         user_id = self._get_int_or_none('user_id')
         if user_id:
             try:
-                FriendInvitation.objects.approve(user_id, self.request.user)
+                r = FriendInvitation.objects.approve(user_id, self.request.user)
             except ValueError, e:
                 messages.warning(self.request, e)
             else:
-                messages.success(self.request, _(u'Заявка успешно подтверждена. Пользователь добавлен в друзья.'))
+                if r:
+                    messages.success(self.request, _(u'Заявка успешно подтверждена. Пользователь добавлен в друзья.'))
         return 'user_incoming'
 
     def _action_reject(self):
         user_id = self._get_int_or_none('user_id')
         if user_id:
-            try:
-                FriendInvitation.objects.reject(user_id, self.request.user)
-            except ValueError, e:
-                messages.warning(self.request, e)
-            else:
-                messages.success(self.request, _(u'Заявка успершно отклонена.'))
+            FriendInvitation.objects.reject(user_id, self.request.user)
+            messages.success(self.request, _(u'Заявка успешно отклонена.'))
         return 'user_incoming'
 
 

@@ -2,10 +2,9 @@
 from __future__ import absolute_import
 from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
-from django.utils.translation import ugettext
 from microsocial.forms import BootstrapFormMixin
 from users.models import User, UserWallPost
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 
 class UserProfileForm(forms.ModelForm, BootstrapFormMixin):
@@ -29,7 +28,7 @@ class UserPasswordChangeForm(PasswordChangeForm, BootstrapFormMixin):
 
 class UserEmailChangeForm(forms.Form, BootstrapFormMixin):
     new_email = forms.EmailField(max_length=75, label=_(u'новый email'))
-    password = forms.CharField(label=_(u'текущий пароль'), widget=forms.PasswordInput())
+    password = forms.CharField(label=_(u'текущий пароль'), widget=forms.PasswordInput)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -39,13 +38,13 @@ class UserEmailChangeForm(forms.Form, BootstrapFormMixin):
     def clean_new_email(self):
         new_email = self.cleaned_data['new_email'].strip()
         if User.objects.filter(email=new_email).exclude(pk=self.user.pk).exists():
-            raise forms.ValidationError(_(u'Пользователь с таким email уже существует.'))
+            raise forms.ValidationError(ugettext(u'Пользователь с таким email уже существует.'))
         return new_email
 
     def clean_password(self):
         password = self.cleaned_data['password']
         if not self.user.check_password(password):
-            raise forms.ValidationError(_(u'Введен неправильный пароль.'))
+            raise forms.ValidationError(ugettext(u'Введен неправильный пароль.'))
         return password
 
     def save(self, commit=True):
@@ -73,7 +72,7 @@ class UserWallPostForm(forms.ModelForm, BootstrapFormMixin):
 
 class SearchForm(forms.Form, BootstrapFormMixin):
     name = forms.CharField(label=_(u'имя, фамилия'), required=False)
-    sex = forms.TypedChoiceField(label=_(u'имя, фамилия'), required=False,
+    sex = forms.TypedChoiceField(label=_(u'пол'), required=False,
                                  choices=((0, _(u'все')),) + User.SEX_CHOICES[1:],
                                  coerce=lambda val: int(val))
     by_from = forms.IntegerField(label=_(u'год рождения от'), required=False,
