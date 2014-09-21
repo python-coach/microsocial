@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'users',
     'auths',
     'dialogs',
+    'news',
     'microsocial',
 )
 

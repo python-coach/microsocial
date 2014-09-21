@@ -22,6 +22,7 @@ urlpatterns = patterns(
     url(r'', include('auths.urls')),
     url(r'', include('users.urls')),
     url(r'', include('dialogs.urls')),
+    url(r'', include('news.urls')),
 )
 
 

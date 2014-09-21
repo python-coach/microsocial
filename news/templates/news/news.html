@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load i18n microsocial dialogs users humanize %}
+
+
+{% block content %}
+    <h1>{% trans 'новости'|capfirst %}</h1>
+    {% for item in items %}
+        {% include item.get_templte_for_display %}
+    {% endfor %}
+    {% show_paginator items %}
+{% endblock %}
