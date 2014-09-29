@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
-from django.dispatch.dispatcher import receiver
+from django.dispatch import receiver
 
 
 class DialogManager(models.Manager):
@@ -24,6 +24,7 @@ class Dialog(models.Model):
     user1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='+')
     user2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='+')
     last_message = models.ForeignKey('Message', related_name='+', null=True, blank=True)
+
     objects = DialogManager()
 
     class Meta:

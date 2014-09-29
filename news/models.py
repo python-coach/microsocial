@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from users.models import UserWallPost, make_friends, break_friends
+from users.models import make_friends, break_friends
 
 
 class NewsItemManager(models.Manager):
@@ -30,28 +30,29 @@ class NewsItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='+')
     target = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='+')
     type = models.CharField(max_length=50, choices=TYPE_CHOICES)
-    content_type = models.ForeignKey(ContentType, blank=True, null=True)
-    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
     news_object = GenericForeignKey()
     created = models.DateTimeField(auto_now_add=True)
 
     objects = NewsItemManager()
 
-    def get_templte_for_display(self):
-        return 'news/display_%s.html' % self.type
-
     class Meta:
         ordering = ('-created',)
 
+    def get_template_for_display(self):
+        return 'news/display_%s.html' % self.type
 
-@receiver(post_save, sender=UserWallPost)
-def add_news_wall_post(sender, instance, **kwargs):
-    NewsItem.objects.create(
-        user=instance.user,
-        target=instance.author,
-        type=NewsItem.TYPE_WALL_POST,
-        news_object=instance
-    )
+
+@receiver(post_save, sender='users.UserWallPost')
+def add_news_wall_post(sender, instance, created, **kwargs):
+    if created:
+        NewsItem.objects.create(
+            user=instance.author,
+            target=instance.user,
+            type=NewsItem.TYPE_WALL_POST,
+            news_object=instance,
+        )
 
 
 @receiver(make_friends)

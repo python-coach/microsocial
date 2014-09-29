@@ -13,7 +13,7 @@
                     <a href="{% url 'user_profile' dialog_opponent.pk %}">
                         <img class="img-responsive" width="60" style="display: inline-block;"
                          src="{{ dialog_opponent|get_avatar }}"></a>
-                    <a href="{% url 'messages' dialog_opponent.pk %}" style="font-size: 16px">
+                    <a href="{% url 'messages' dialog_opponent.pk %}" style="font-size: 16px;">
                         {{ dialog_opponent.get_full_name }}</a>
                 </div>
             {% endfor %}
@@ -41,12 +41,12 @@
                 </form>
                 {% for message in dialog_messages %}
                     <div style="margin-top: 20px;">
-                        <div class="row" >
+                        <div class="row">
                             <div class="col-sm-2">
                                 <img class="img-responsive" src="{{ message.sender|get_avatar }}">
                             </div>
                             <div class="col-sm-3">
-                                <a href="{% url 'user_profile' message.sender_id %}">
+                                <a href="{% url 'user_profile' message.sender.pk %}">
                                     {{ message.sender.get_full_name }}
                                 </a>
                                 <br>

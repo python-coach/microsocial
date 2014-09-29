@@ -28,10 +28,10 @@ class DialogView(TemplateView):
         return super(DialogView, self).dispatch(request, *args, **kwargs)
 
     def get_dialogs(self):
-        qs = Dialog.objects.select_related('user1', 'user2').filter(
+        qs = Dialog.objects.for_user(self.request.user).select_related('user1', 'user2').filter(
             last_message__isnull=False
         ).order_by('-last_message__created')
-        paginator = Paginator(qs, 1)
+        paginator = Paginator(qs, 20)
         page = self.request.GET.get('dialogs_page')
         try:
             items = paginator.page(page)
@@ -44,7 +44,7 @@ class DialogView(TemplateView):
     def get_messages(self):
         if not self.dialog:
             return
-        paginator = Paginator(self.dialog.messages.all(), 1)
+        paginator = Paginator(self.dialog.messages.all(), 20)
         page = self.request.GET.get('messages_page')
         try:
             items = paginator.page(page)
